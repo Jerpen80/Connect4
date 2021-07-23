@@ -197,7 +197,7 @@ _________                                     __      _____
 \t\t\t\t\t   By Jeroen Penders
  """)
 print("Welcome to Connect 4 version 1.0\n")
-print("AI is comming soon, for now this is only a 2 player game, enjoy!\n")
+print("AI is coming soon, for now this is only a 2 player game, enjoy!\n")
 name1 = input("Player 1 please enter your name: ")
 name2 = input("Player 2 please enter your name: ")
 print("\nHello, "+name1+" and "+name2+"!\n" )
