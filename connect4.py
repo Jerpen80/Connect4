@@ -6,29 +6,34 @@ board = [[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' 
 
 # draws the board
 def boarddraw(board):
-    print("  1   2   3   4   5   6   7")
-    print("+---+---+---+---+---+---+---+")
-    print("| "+board[0][0]+" | "+board[0][1]+" | "+board[0][2]+" | "+board[0][3]+" | "+board[0][4]+" | "+board[0][5]+" | "+board[0][6]+" |")
-    print("+---+---+---+---+---+---+---+")
-    print("| "+board[1][0]+" | "+board[1][1]+" | "+board[1][2]+" | "+board[1][3]+" | "+board[1][4]+" | "+board[1][5]+" | "+board[1][6]+" |")
-    print("+---+---+---+---+---+---+---+")
-    print("| "+board[2][0]+" | "+board[2][1]+" | "+board[2][2]+" | "+board[2][3]+" | "+board[2][4]+" | "+board[2][5]+" | "+board[2][6]+" |")
-    print("+---+---+---+---+---+---+---+")
-    print("| "+board[3][0]+" | "+board[3][1]+" | "+board[3][2]+" | "+board[3][3]+" | "+board[3][4]+" | "+board[3][5]+" | "+board[3][6]+" |")
-    print("+---+---+---+---+---+---+---+")
-    print("| "+board[4][0]+" | "+board[4][1]+" | "+board[4][2]+" | "+board[4][3]+" | "+board[4][4]+" | "+board[4][5]+" | "+board[4][6]+" |")
-    print("+---+---+---+---+---+---+---+")
-    print("| "+board[5][0]+" | "+board[5][1]+" | "+board[5][2]+" | "+board[5][3]+" | "+board[5][4]+" | "+board[5][5]+" | "+board[5][6]+" |")
-    print("+---+---+---+---+---+---+---+")
+    print("\t  1   2   3   4   5   6   7")
+    print("\t+---+---+---+---+---+---+---+")
+    print("\t| "+board[0][0]+" | "+board[0][1]+" | "+board[0][2]+" | "+board[0][3]+" | "+board[0][4]+" | "+board[0][5]+" | "+board[0][6]+" |")
+    print("\t+---+---+---+---+---+---+---+")
+    print("\t| "+board[1][0]+" | "+board[1][1]+" | "+board[1][2]+" | "+board[1][3]+" | "+board[1][4]+" | "+board[1][5]+" | "+board[1][6]+" |")
+    print("\t+---+---+---+---+---+---+---+")
+    print("\t| "+board[2][0]+" | "+board[2][1]+" | "+board[2][2]+" | "+board[2][3]+" | "+board[2][4]+" | "+board[2][5]+" | "+board[2][6]+" |")
+    print("\t+---+---+---+---+---+---+---+")
+    print("\t| "+board[3][0]+" | "+board[3][1]+" | "+board[3][2]+" | "+board[3][3]+" | "+board[3][4]+" | "+board[3][5]+" | "+board[3][6]+" |")
+    print("\t+---+---+---+---+---+---+---+")
+    print("\t| "+board[4][0]+" | "+board[4][1]+" | "+board[4][2]+" | "+board[4][3]+" | "+board[4][4]+" | "+board[4][5]+" | "+board[4][6]+" |")
+    print("\t+---+---+---+---+---+---+---+")
+    print("\t| "+board[5][0]+" | "+board[5][1]+" | "+board[5][2]+" | "+board[5][3]+" | "+board[5][4]+" | "+board[5][5]+" | "+board[5][6]+" |")
+    print("\t+---+---+---+---+---+---+---+")
+
+# randomizer to determine who starts
+def start(starter = ['p1','p2']):
+    starter = random.choice(starter)
+    return starter
 
 # move for player 1
 def movep1():
-    p1move = int(input("Select which column you want to drop your piece: (1 - 7): "))
+    p1move = int(input(player1+ ", please select which column you want to drop your piece(X): (1 - 7): "))
     return p1move
 
 # move for player 2
 def movep2():
-    p2move = int(input("Select which column you want to drop your piece: (1 - 7): "))
+    p2move = int(input(player2+ ", please select which column you want to drop your piece(O): (1 - 7): "))
     return p2move
 
 
@@ -62,11 +67,11 @@ def checkwinp2(board):
 def winner():
     if checkwinp1(board):
         boarddraw(board)
-        print("Player 1 won!!!")
+        print("\n"+player1+" won!!!")
         return True
     elif checkwinp2(board):
         boarddraw(board)
-        print("Player 2 won!!!")
+        print("\n"+player2+" won!!!")
         return True
     else:
         return False
@@ -182,6 +187,32 @@ def windiagonalb2(board):
                 continue
 
 # Game start
+print("""
+_________                                     __      _____  
+\_   ___ \  ____   ____   ____   ____   _____/  |_   /  |  | 
+/    \  \/ /  _ \ /    \ /    \_/ __ \_/ ___\   __\ /   |  |_
+\     \___(  <_> )   |  \   |  \  ___/\  \___|  |  /    ^   /
+ \______  /\____/|___|  /___|  /\___  >\___  >__|  \____   | 
+        \/            \/     \/     \/     \/           |__| 
+\t\t\t\t\t   By Jeroen Penders
+ """)
+print("Welcome to Connect 4 version 1.0\n")
+print("AI is comming soon, for now this is only a 2 player game, enjoy!\n")
+name1 = input("Player 1 please enter your name: ")
+name2 = input("Player 2 please enter your name: ")
+print("\nHello, "+name1+" and "+name2+"!\n" )
+input("Please press enter to see who begins\n")
+starter = start()
+if starter == 'p1':
+    player1 = name1
+    player2 = name2
+    print(name1+" begins!\n")
+    input("Press enter to begin...")
+else:
+    player2 = name1
+    player1 = name2
+    print(name2+" begins!\n")
+    input("Press enter to begin...")
 while free(board):
     boarddraw(board)
     p1move = movep1()
@@ -191,7 +222,6 @@ while free(board):
         p1move = movep1()
     if winner():
         exit()
-        
     boarddraw(board)
     p2move = movep2()
     while not dropp2(p2move):
@@ -202,4 +232,5 @@ while free(board):
         exit()
 
 # only displayed if board is full
-print("Board is full, it's a draw")
+boarddraw(board)
+print("Board is full, it's a draw...")
