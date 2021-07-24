@@ -36,7 +36,7 @@ def pmove(valid = [1,2,3,4,5,6,7]):
             continue
     return pmove
 
-# runs several fuctions to check boardstate for wins for player1
+# runs several fuctions to check boardstate for wins for current player
 def checkwin(board):
     if winhorizontal(board):
         return True
@@ -65,7 +65,7 @@ def free(board):
     else:
         return False
 
-# function to check which is the lowest row of the column that is free (player 1)
+# function to check which is the lowest row of the column that is free
 def drop(pmove):
     i = 0
     if board[i][pmove-1] != ' ':
@@ -136,15 +136,11 @@ starter = start()
 if starter == 'p1':
     player1 = name1
     player2 = name2
-    #piece1 = 'X'
-    #piece2 = 'O'
     print(name1+" begins!\n")
     input("Press enter to begin...")
 else:
     player2 = name1
     player1 = name2
-    #piece2 = 'X'
-    #piece1 = 'O'
     print(name2+" begins!\n")
     input("Press enter to begin...")
 while free(board):
@@ -162,7 +158,7 @@ while free(board):
     piece = 'O'
     boarddraw(board)
     p2move = pmove()
-    while not drop(p2move):
+    while not drop(pmove):
         boarddraw(board)
         print("Column is full...")
         p2move = pmove()
