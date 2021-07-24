@@ -26,52 +26,34 @@ def start(starter = ['p1','p2']):
     starter = random.choice(starter)
     return starter
 
-# move for player 1
-def movep1():
-    p1move = int(input(player1+ ", please select which column you want to drop your piece(X): (1 - 7): "))
-    return p1move
-
-# move for player 2
-def movep2():
-    p2move = int(input(player2+ ", please select which column you want to drop your piece(O): (1 - 7): "))
-    return p2move
-
+# player move
+def pmove(valid = [1,2,3,4,5,6,7]):
+    pmove = 0
+    while pmove not in valid:
+        try:
+            pmove = int(input(player+ ", please select which column you want to drop your piece("+piece+"): (1 - 7): "))
+        except ValueError:
+            continue
+    return pmove
 
 # runs several fuctions to check boardstate for wins for player1
-def checkwinp1(board):
-    if winhorizontal1(board):
+def checkwin(board):
+    if winhorizontal(board):
         return True
-    elif winvertical1(board):
+    elif winvertical(board):
         return True
-    elif windiagonala1(board):
+    elif windiagonala(board):
         return True
-    elif windiagonalb1(board):
-        return True
-    else:
-        return False
-
-# runs several fuctions to check boardstate for wins for player2
-def checkwinp2(board):
-    if winhorizontal2(board):
-        return True
-    elif winvertical2(board):
-        return True
-    elif windiagonala2(board):
-        return True
-    elif windiagonalb2(board):
+    elif windiagonalb(board):
         return True
     else:
         return False
 
 # runs checkwin functions and displays winner
 def winner():
-    if checkwinp1(board):
+    if checkwin(board):
         boarddraw(board)
-        print("\n"+player1+" won!!!")
-        return True
-    elif checkwinp2(board):
-        boarddraw(board)
-        print("\n"+player2+" won!!!")
+        print("\n"+player+" won!!!")
         return True
     else:
         return False
@@ -84,104 +66,52 @@ def free(board):
         return False
 
 # function to check which is the lowest row of the column that is free (player 1)
-def dropp1(p1move):
+def drop(pmove):
     i = 0
-    if board[i][p1move-1] != ' ':
+    if board[i][pmove-1] != ' ':
         return False
     else:
-        while board[i][p1move-1] == ' ':
+        while board[i][pmove-1] == ' ':
             if i == 5:
-               board[i][p1move-1] = 'X'
+               board[i][pmove-1] = piece
                return True
             i += 1
-        board[i-1][p1move-1] = 'X'
+        board[i-1][pmove-1] = piece
         return True
 
-# function to check which is the lowest row of the column that is free (player 2)
-def dropp2(p2move):
-    i = 0
-    if board[i][p2move-1] != ' ':
-        return False
-    else:
-        while board[i][p2move-1] == ' ':
-            if i == 5:
-                board[i][p2move-1] = 'O'
-                return True
-            i += 1
-        board[i-1][p2move-1] = 'O'
-        return True
-
-
-
-# Horizontal check p1
-def winhorizontal1(board):
+# Horizontal check
+def winhorizontal(board):
     for column in range(6):
         for row in range(4):
 
-            if board[column][row] + board[column][row+1] + board[column][row+2] + board[column][row+3] == 'XXXX':
+            if board[column][row] + board[column][row+1] + board[column][row+2] + board[column][row+3] == 4 * piece:
                 return True
             else:
                 continue
 
-# Vertical check p1
-def winvertical1(board):    
+# Vertical check
+def winvertical(board):    
     for column in range(3):
         for row in range(7):
-            if board[column][row] + board[column+1][row] + board[column+2][row] + board[column+3][row] == 'XXXX':
+            if board[column][row] + board[column+1][row] + board[column+2][row] + board[column+3][row] == 4 * piece:
                 return True
             else:
                 continue
 
-# diagonal check a p1
-def windiagonala1(board):    
+# diagonal check a 
+def windiagonala(board):    
     for column in range(3):
         for row in range(4):
-            if board[column][row] + board[column+1][row+1] + board[column+2][row+2] + board[column+3][row+3] == 'XXXX':
+            if board[column][row] + board[column+1][row+1] + board[column+2][row+2] + board[column+3][row+3] == 4 * piece:
                 return True
             else:
                 continue
 
-# diagonal check b p1
-def windiagonalb1(board):
+# diagonal check b
+def windiagonalb(board):
     for column in range(3,6):
         for row in range(4):
-            if board[column][row] + board[column-1][row+1] + board[column-2][row+2] + board[column-3][row+3] == 'XXXX':
-                return True
-            else:
-                continue
-
-# Horizontal check p2
-def winhorizontal2(board):
-    for column in range(6):
-        for row in range(4):
-            if board[column][row] + board[column][row+1] + board[column][row+2] + board[column][row+3] == 'OOOO':
-                return True
-            else:
-                continue
-
-# Vertical check p2
-def winvertical2(board):    
-    for column in range(3):
-        for row in range(7):
-            if board[column][row] + board[column+1][row] + board[column+2][row] + board[column+3][row] == 'OOOO':
-                return True
-            else:
-                continue
-
-# diagonal check a p2
-def windiagonala2(board):    
-    for column in range(3):
-        for row in range(4):
-            if board[column][row] + board[column+1][row+1] + board[column+2][row+2] + board[column+3][row+3] == 'OOOO':
-                return True
-            else:
-                continue
-
-# diagonal check b p2
-def windiagonalb2(board):
-    for column in range(3,6):
-        for row in range(4):
-            if board[column][row] + board[column-1][row+1] + board[column-2][row+2] + board[column-3][row+3] == 'OOOO':
+            if board[column][row] + board[column-1][row+1] + board[column-2][row+2] + board[column-3][row+3] == 4 * piece:
                 return True
             else:
                 continue
@@ -197,7 +127,7 @@ _________                                     __      _____
 \t\t\t\t\t   By Jeroen Penders
  """)
 print("Welcome to Connect 4 version 1.0\n")
-print("AI is comming soon, for now this is only a 2 player game, enjoy!\n")
+print("AI is coming soon, for now this is only a 2 player game, enjoy!\n")
 name1 = input("Player 1 please enter your name: ")
 name2 = input("Player 2 please enter your name: ")
 print("\nHello, "+name1+" and "+name2+"!\n" )
@@ -206,28 +136,36 @@ starter = start()
 if starter == 'p1':
     player1 = name1
     player2 = name2
+    #piece1 = 'X'
+    #piece2 = 'O'
     print(name1+" begins!\n")
     input("Press enter to begin...")
 else:
     player2 = name1
     player1 = name2
+    #piece2 = 'X'
+    #piece1 = 'O'
     print(name2+" begins!\n")
     input("Press enter to begin...")
 while free(board):
+    player = player1
+    piece = 'X'
     boarddraw(board)
-    p1move = movep1()
-    while not dropp1(p1move):
+    p1move = pmove()
+    while not drop(p1move):
         boarddraw(board)
         print("Column is full...")
-        p1move = movep1()
+        p1move = pmove()
     if winner():
         exit()
+    player = player2
+    piece = 'O'
     boarddraw(board)
-    p2move = movep2()
-    while not dropp2(p2move):
+    p2move = pmove()
+    while not drop(p2move):
         boarddraw(board)
         print("Column is full...")
-        p2move = movep2()
+        p2move = pmove()
     if winner():
         exit()
 
