@@ -36,7 +36,7 @@ def pmove(valid = [1,2,3,4,5,6,7]):
             continue
     return pmove
 
-# runs several fuctions to check boardstate for wins for current player
+# runs several fuctions to check boardstate for wins for player
 def checkwin(board):
     if winhorizontal(board):
         return True
@@ -126,7 +126,7 @@ _________                                     __      _____
         \/            \/     \/     \/     \/           |__| 
 \t\t\t\t\t   By Jeroen Penders
  """)
-print("Welcome to Connect 4 version 1.0\n")
+print("Welcome to Connect 4 version 1.1\n")
 print("AI is coming soon, for now this is only a 2 player game, enjoy!\n")
 name1 = input("Player 1 please enter your name: ")
 name2 = input("Player 2 please enter your name: ")
@@ -158,7 +158,7 @@ while free(board):
     piece = 'O'
     boarddraw(board)
     p2move = pmove()
-    while not drop(pmove):
+    while not drop(p2move):
         boarddraw(board)
         print("Column is full...")
         p2move = pmove()
