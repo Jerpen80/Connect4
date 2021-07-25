@@ -1,12 +1,11 @@
 import random
-import math
 
 # board in nested lists
 board = [[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],
 [' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' ']]
 
 # draws the board
-def boardprint(board):
+def boardprint():
     print("\t  1   2   3   4   5   6   7")
     print("\t+---+---+---+---+---+---+---+")
     print("\t| "+board[0][0]+" | "+board[0][1]+" | "+board[0][2]+" | "+board[0][3]+" | "+board[0][4]+" | "+board[0][5]+" | "+board[0][6]+" |")
@@ -52,31 +51,31 @@ def pmove(valid = [1,2,3,4,5,6,7]):
     return pmove
 
 # runs several fuctions to check boardstate for wins for player
-def checkwin(board):
-    if winhorizontal(board):
+def checkwin():
+    if winhorizontal():
         return True
-    elif winvertical(board):
+    elif winvertical():
         return True
-    elif windiagonala(board):
+    elif windiagonala():
         return True
-    elif windiagonalb(board):
+    elif windiagonalb():
         return True
     else:
         return False
 
 # runs checkwin functions and displays winner
 def winner():
-    if checkwin(board):
-        boardprint(board)
-        print("\n\t-------------------------")
+    if checkwin():
+        boardprint()
+        print("\n\t  -------------------------")
         print("\t     "+player+" won!!!")
-        print("\t-------------------------\n")
+        print("\t  -------------------------\n")
         return True
     else:
         return False
 
 # checks if board is full, if so, the game is a draw
-def free(board):
+def free():
     if any(' ' in move for move in board):
         return True
     else:
@@ -97,7 +96,7 @@ def drop(pmove):
         return True
 
 # Horizontal check
-def winhorizontal(board):
+def winhorizontal():
     for column in range(6):
         for row in range(4):
 
@@ -107,7 +106,7 @@ def winhorizontal(board):
                 continue
 
 # Vertical check
-def winvertical(board):    
+def winvertical():    
     for column in range(3):
         for row in range(7):
             if board[column][row] + board[column+1][row] + board[column+2][row] + board[column+3][row] == 4 * piece:
@@ -116,7 +115,7 @@ def winvertical(board):
                 continue
 
 # diagonal check a 
-def windiagonala(board):    
+def windiagonala():    
     for column in range(3):
         for row in range(4):
             if board[column][row] + board[column+1][row+1] + board[column+2][row+2] + board[column+3][row+3] == 4 * piece:
@@ -125,7 +124,7 @@ def windiagonala(board):
                 continue
 
 # diagonal check b
-def windiagonalb(board):
+def windiagonalb():
     for column in range(3,6):
         for row in range(4):
             if board[column][row] + board[column-1][row+1] + board[column-2][row+2] + board[column-3][row+3] == 4 * piece:
@@ -133,33 +132,35 @@ def windiagonalb(board):
             else:
                 continue
 
+# Player 1 turn
 def human1():
-    boardprint(board)
+    boardprint()
     p1move = pmove()
     while not drop(p1move):
-        boardprint(board)
-        print("Column is full...")
+        boardprint()
+        print("Column is full, please try again, "+player+"!")
         p1move = pmove()
     if winner():
         exit()
     elif draw():
         exit()
     
-    
+# Player 2 turn    
 def human2():
-    boardprint(board)
+    boardprint()
     p2move = pmove()
     while not drop(p2move):
-        boardprint(board)
-        print("Column is full...")
+        boardprint()
+        print("Column is full, please try again, "+player+"!")
         p2move = pmove()
     if winner():
         exit()
     elif draw():
         exit()
-    
+
+# print when the game is a draw    
 def draw():
-    if free(board):
+    if free():
         return False
     else:
         print("\nThe game ended in a draw (no more moves available)\n")
@@ -179,7 +180,7 @@ _________                                     __      _____
 print("Welcome to Connect 4 version 1.1\n")
 print("AI is coming soon, for now this is only a 2 player game, enjoy!\n")
 player1, player2 = start2p()
-while free(board):
+while free():
     player = player1
     piece = 'X'
     human1()
