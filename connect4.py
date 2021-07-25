@@ -1,11 +1,12 @@
 import random
+import math
 
 # board in nested lists
 board = [[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],
 [' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' ']]
 
 # draws the board
-def boarddraw(board):
+def boardprint(board):
     print("\t  1   2   3   4   5   6   7")
     print("\t+---+---+---+---+---+---+---+")
     print("\t| "+board[0][0]+" | "+board[0][1]+" | "+board[0][2]+" | "+board[0][3]+" | "+board[0][4]+" | "+board[0][5]+" | "+board[0][6]+" |")
@@ -22,9 +23,23 @@ def boarddraw(board):
     print("\t+---+---+---+---+---+---+---+")
 
 # randomizer to determine who starts
-def start(starter = ['p1','p2']):
+def start2p(starter = ['p1','p2']):
+    name1 = input("Player 1 please enter your name: ")
+    name2 = input("Player 2 please enter your name: ")
+    print("\nHello, "+name1+" and "+name2+"!\n" )
+    input("Please press enter to see who begins\n")
     starter = random.choice(starter)
-    return starter
+    if starter == 'p1':
+        player1 = name1
+        player2 = name2
+        print(name1+" begins!\n")
+        input("Press enter to begin...")
+    else:
+        player2 = name1
+        player1 = name2
+        print(name2+" begins!\n")
+        input("Press enter to begin...")
+    return player1, player2
 
 # player move
 def pmove(valid = [1,2,3,4,5,6,7]):
@@ -52,8 +67,10 @@ def checkwin(board):
 # runs checkwin functions and displays winner
 def winner():
     if checkwin(board):
-        boarddraw(board)
-        print("\n"+player+" won!!!")
+        boardprint(board)
+        print("\n\t-------------------------")
+        print("\t     "+player+" won!!!")
+        print("\t-------------------------\n")
         return True
     else:
         return False
@@ -116,6 +133,39 @@ def windiagonalb(board):
             else:
                 continue
 
+def human1():
+    boardprint(board)
+    p1move = pmove()
+    while not drop(p1move):
+        boardprint(board)
+        print("Column is full...")
+        p1move = pmove()
+    if winner():
+        exit()
+    elif draw():
+        exit()
+    
+    
+def human2():
+    boardprint(board)
+    p2move = pmove()
+    while not drop(p2move):
+        boardprint(board)
+        print("Column is full...")
+        p2move = pmove()
+    if winner():
+        exit()
+    elif draw():
+        exit()
+    
+def draw():
+    if free(board):
+        return False
+    else:
+        print("\nThe game ended in a draw (no more moves available)\n")
+        return True
+
+
 # Game start
 print("""
 _________                                     __      _____  
@@ -128,43 +178,11 @@ _________                                     __      _____
  """)
 print("Welcome to Connect 4 version 1.1\n")
 print("AI is coming soon, for now this is only a 2 player game, enjoy!\n")
-name1 = input("Player 1 please enter your name: ")
-name2 = input("Player 2 please enter your name: ")
-print("\nHello, "+name1+" and "+name2+"!\n" )
-input("Please press enter to see who begins\n")
-starter = start()
-if starter == 'p1':
-    player1 = name1
-    player2 = name2
-    print(name1+" begins!\n")
-    input("Press enter to begin...")
-else:
-    player2 = name1
-    player1 = name2
-    print(name2+" begins!\n")
-    input("Press enter to begin...")
+player1, player2 = start2p()
 while free(board):
     player = player1
     piece = 'X'
-    boarddraw(board)
-    p1move = pmove()
-    while not drop(p1move):
-        boarddraw(board)
-        print("Column is full...")
-        p1move = pmove()
-    if winner():
-        exit()
+    human1()
     player = player2
     piece = 'O'
-    boarddraw(board)
-    p2move = pmove()
-    while not drop(p2move):
-        boarddraw(board)
-        print("Column is full...")
-        p2move = pmove()
-    if winner():
-        exit()
-
-# only displayed if board is full
-boarddraw(board)
-print("Board is full, it's a draw...")
+    human2()
