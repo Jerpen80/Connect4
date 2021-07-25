@@ -42,13 +42,13 @@ def start2p(starter = ['p1','p2']):
 
 # player move
 def pmove(valid = [1,2,3,4,5,6,7]):
-    pmove = 0
-    while pmove not in valid:
+    move = 0
+    while move not in valid:
         try:
-            pmove = int(input(player+ ", please select which column you want to drop your piece("+piece+"): (1 - 7): "))
+            move = int(input(player+ ", please select which column you want to drop your piece("+piece+"): (1 - 7): "))
         except ValueError:
             continue
-    return pmove
+    return move
 
 # runs several fuctions to check boardstate for wins for player
 def checkwin():
@@ -82,17 +82,17 @@ def free():
         return False
 
 # function to check which is the lowest row of the column that is free
-def drop(pmove):
+def drop(move):
     i = 0
-    if board[i][pmove-1] != ' ':
+    if board[i][move-1] != ' ':
         return False
     else:
-        while board[i][pmove-1] == ' ':
+        while board[i][move-1] == ' ':
             if i == 5:
-               board[i][pmove-1] = piece
+               board[i][move-1] = piece
                return True
             i += 1
-        board[i-1][pmove-1] = piece
+        board[i-1][move-1] = piece
         return True
 
 # Horizontal check
@@ -132,32 +132,19 @@ def windiagonalb():
             else:
                 continue
 
-# Player 1 turn
-def human1():
+# Player turn
+def human():
     boardprint()
-    p1move = pmove()
-    while not drop(p1move):
+    move = pmove()
+    while not drop(move):
         boardprint()
         print("Column is full, please try again, "+player+"!")
-        p1move = pmove()
+        move = pmove()
     if winner():
         exit()
     elif draw():
         exit()
     
-# Player 2 turn    
-def human2():
-    boardprint()
-    p2move = pmove()
-    while not drop(p2move):
-        boardprint()
-        print("Column is full, please try again, "+player+"!")
-        p2move = pmove()
-    if winner():
-        exit()
-    elif draw():
-        exit()
-
 # print when the game is a draw    
 def draw():
     if free():
@@ -183,7 +170,7 @@ player1, player2 = start2p()
 while free():
     player = player1
     piece = 'X'
-    human1()
+    human()
     player = player2
     piece = 'O'
-    human2()
+    human()
