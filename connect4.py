@@ -8,7 +8,7 @@ import math
 boardlist = [[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],
 [' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' ']]
 
-# Convert boardlist into 2d array
+# Convert boardlist into 2d array for AI iterations
 board = numpy.array(boardlist)
 
 # draws the board
@@ -28,7 +28,7 @@ def boardprint():
     print("\t| "+board[5][0]+" | "+board[5][1]+" | "+board[5][2]+" | "+board[5][3]+" | "+board[5][4]+" | "+board[5][5]+" | "+board[5][6]+" |")
     print("\t+---+---+---+---+---+---+---+")
 
-# randomizer to determine who starts
+# Launch 2 player game and randomizer to determine who starts
 def start2p(starter = ['p1','p2']):
     name1 = input("Player 1 please enter your name: ")
     name2 = input("Player 2 please enter your name: ")
@@ -200,16 +200,16 @@ def minimax(board, depth, max):
     if depth == 0 or end:
         if end:
             if checkwin(board):
-                if aipiece == piece:
+                if aipiece == piece: # AI wins
                     return (None, 100000)
-                else:
+                else: # Player wins
                     return (None, -100000)
-            else: # No more moves
+            else: # No more moves possible
                 return (None, 0)
         else:
             return (None, scorepostion(board, aipiece))
     if max:
-        value = -math.inf
+        value = -math.inf # minus infinity
         column = random.randint(0,6)
         for column in validlocations:
             row = nextopenrow(board, column)
@@ -222,7 +222,7 @@ def minimax(board, depth, max):
         return bestcolumn, value
 
     else:
-        value = math.inf
+        value = math.inf # infinity
         column = random.randint(0,6)
         for column in validlocations:
             row = nextopenrow(board, column)
@@ -276,7 +276,7 @@ def draw():
 # Start 2 player game
 def start1p(starter = ['p1','p2']):
     name1 = input("Player 1 please enter your name: ")
-    name2 = "Retard AI"
+    name2 = "Computer"
     print("\nHello, "+name1+"\n" )
     input("Please press enter to see who begins\n")
     starter = random.choice(starter)
@@ -293,7 +293,7 @@ def start1p(starter = ['p1','p2']):
     return starter, player1, player2
 
 # AI move
-def randomretard(board):
+def computer(board):
     move, minmaxscore = minimax(board, 3, True)
     move += 1 
     boardprint()
@@ -315,9 +315,9 @@ _________                                     __      _____
         \/            \/     \/     \/     \/           |__| 
 \t\t\t\t\t   By Jeroen Penders
  """)
-print("Welcome to Connect 4 version 1.1\n")
-print("AI is coming soon, for now this is only a 2 player game, enjoy!\n")
-print("Enter 1 to play against FullRetardAI")
+print("Welcome to Connect 4 version 1.2\n")
+print("Heuristic minimax AI is implemented, still needs some balancing. Enjoy!\n")
+print("Enter 1 to play against the Computer")
 print("Enter 2 to play a 2 player game")
 choices = ['1','2']
 game = 0
@@ -335,7 +335,7 @@ if game == '1':
             human()
             player = player2
             piece = 'O'
-            randomretard(board)
+            computer(board)
     
     else:
         humanpiece = 'O'
@@ -343,7 +343,7 @@ if game == '1':
         while free():
             player = player1
             piece = 'X'
-            randomretard(board)
+            computer(board)
             player = player2
             piece = 'O'
             human()
