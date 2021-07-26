@@ -273,7 +273,7 @@ def draw():
         print("\nThe game ended in a draw (no more moves available)\n")
         return True
 
-# Start 2 player game
+# Start 1 player game
 def start1p(starter = ['p1','p2']):
     name1 = input("Player 1 please enter your name: ")
     name2 = "Retard AI"
