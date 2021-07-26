@@ -4,7 +4,7 @@ import copy
 import numpy
 import math
 
-# board in nested lists
+# board in nested list
 boardlist = [[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],
 [' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' ']]
 
@@ -142,6 +142,7 @@ def windiagonalb(board):
             else:
                 continue
 
+# creating windows of 4x4 to make it easier to set move scores for AI with windowscore function
 def scorepostion(board, piece):
     score = 0
     # Score center
@@ -172,6 +173,7 @@ def scorepostion(board, piece):
             score += windowscore(window, piece)
     return score 
 
+# Determining the points for the boardstate after a certain AI move while minimaxing
 def windowscore(window, piece):
     score = 0
     # Player vs ai piece
@@ -191,9 +193,11 @@ def windowscore(window, piece):
         score -= 2
     return score
 
+# Checks if game is over during minimaxing
 def endgame(board):
     return checkwin(board) or getvalidlocation(board) == 0
 
+# minimax AI
 def minimax(board, depth, max):
     validlocations = getvalidlocation(board)
     end = endgame(board)
@@ -239,12 +243,14 @@ def nextopenrow(board, column):
             if board[row][column] == ' ':
                 return row
 
+# Function to see if column has a free spot for getvalidlocation
 def valid(board, column):
     if board[0][column] != ' ':
         return False
     else:
         return True
 
+# Creating a list of column with 1 or more free spots(valid function) for AI to put pieces when minimaxing
 def getvalidlocation(board):
     validlocations = []
     for column in range(7):
@@ -273,7 +279,7 @@ def draw():
         print("\nThe game ended in a draw (no more moves available)\n")
         return True
 
-# Start 1 player game
+# Start 2 player game
 def start1p(starter = ['p1','p2']):
     name1 = input("Player 1 please enter your name: ")
     name2 = "Computer"
@@ -307,7 +313,7 @@ def computer(board):
 
 # Game start
 print("""
-_________                                     __      _____  
+_________           AI Project 2              __      _____  
 \_   ___ \  ____   ____   ____   ____   _____/  |_   /  |  | 
 /    \  \/ /  _ \ /    \ /    \_/ __ \_/ ___\   __\ /   |  |_
 \     \___(  <_> )   |  \   |  \  ___/\  \___|  |  /    ^   /
@@ -324,9 +330,9 @@ game = 0
 if game not in choices:
     game = input("Enter 1 or 2: ")
 if game == '1':
-    
+    # Start 1 player game
     starter, player1, player2 = start1p()
-    if starter == 'p1':
+    if starter == 'p1': # player(human) starts
         humanpiece = 'X'
         aipiece = 'O'
         while free():
@@ -337,7 +343,7 @@ if game == '1':
             piece = 'O'
             computer(board)
     
-    else:
+    else: # AI starts
         humanpiece = 'O'
         aipiece = 'X'
         while free():
@@ -348,6 +354,7 @@ if game == '1':
             piece = 'O'
             human()
 
+# Start 2 palyer game
 else:
     player1, player2 = start2p()
     while free():
