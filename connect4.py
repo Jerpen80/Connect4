@@ -4,15 +4,12 @@ import copy
 import numpy
 import math
 
-#aipiece = 0
-#humanpiece = 0
-#piece = 0
 # board in nested lists
 boardlist = [[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],
 [' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' '],[' ',' ',' ',' ',' ',' ',' ']]
 
+# Convert boardlist into 2d array
 board = numpy.array(boardlist)
-#print(board)
 
 # draws the board
 def boardprint():
@@ -108,7 +105,6 @@ def drop(board, move, piece):
 def dropai(tempboard, row, move, piece):
     tempboard[row][move] = piece
         
-
 # Horizontal check
 def winhorizontal(board):
     for column in range(6):
@@ -174,7 +170,6 @@ def scorepostion(board, piece):
         for column in range(4):
             window = [board[row+3-i][column+i] for i in range(4)]
             score += windowscore(window, piece)
-    
     return score 
 
 def windowscore(window, piece):
@@ -302,6 +297,7 @@ def randomretard(board):
     move, minmaxscore = minimax(board, 3, True)
     move += 1 
     boardprint()
+    print("Thinking...")
     time.sleep(1)
     drop(board,move, piece)
     if winner(board):
