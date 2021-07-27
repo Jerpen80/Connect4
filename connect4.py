@@ -148,7 +148,7 @@ def scorepostion(board, piece):
     # Score center
     center = [i for i in list(board[:,7//2])]
     centercount = center.count(piece)
-    score += centercount * 4
+    score += centercount * 3
     # Horizontal score
     for row in range(6):
         rowarray = [i for i in list(board[row,:])]
@@ -184,13 +184,11 @@ def windowscore(window, piece):
     if window.count(piece) == 4:
         score +=100
     elif window.count(piece) == 3 and window.count(' ') == 1:
-        score += 10
-    elif window.count(piece) == 2 and window.count(' ') == 2:
         score += 5
+    elif window.count(piece) == 2 and window.count(' ') == 2:
+        score += 2
     if window.count(playerpiece) == 3 and window.count(' ') == 1:
-        score -= 80
-    elif window.count(playerpiece) == 2 and window.count(' ') == 2:
-        score -= 2
+        score -= 4
     return score
 
 # Checks if game is over during minimaxing
@@ -300,7 +298,7 @@ def start1p(starter = ['p1','p2']):
 
 # AI move
 def computer(board):
-    move, minmaxscore = minimax(board, 3, True)
+    move, minmaxscore = minimax(board, 4, True)
     move += 1 
     boardprint()
     print("Thinking...")
