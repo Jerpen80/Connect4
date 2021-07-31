@@ -58,21 +58,35 @@ def pmove(valid = [1,2,3,4,5,6,7]):
     return move
 
 # runs several fuctions to check boardstate for wins for player
-def checkwin(board):
-    if winhorizontal(board):
-        return True
-    elif winvertical(board):
-        return True
-    elif windiagonala(board):
-        return True
-    elif windiagonalb(board):
-        return True
-    else:
-        return False
+def checkwin(board, piece):
+    # Horizontal check
+    for column in range(6):
+        for row in range(4):
+            if board[column][row] + board[column][row+1] + board[column][row+2] + board[column][row+3] == 4 * piece:
+                return True
+            
+    # Vertical check
+    for column in range(3):
+        for row in range(7):
+            if board[column][row] + board[column+1][row] + board[column+2][row] + board[column+3][row] == 4 * piece:
+                return True
+            
 
+    # diagonal check a 
+    for column in range(3):
+        for row in range(4):
+            if board[column][row] + board[column+1][row+1] + board[column+2][row+2] + board[column+3][row+3] == 4 * piece:
+                return True
+            
+    # diagonal check b
+    for column in range(3,6):
+        for row in range(4):
+            if board[column][row] + board[column-1][row+1] + board[column-2][row+2] + board[column-3][row+3] == 4 * piece:
+                return True
+                
 # runs checkwin functions and displays winner
 def winner(board):
-    if checkwin(board):
+    if checkwin(board, piece):
         boardprint()
         print("\n\t  -------------------------")
         print("\t       "+player+" won!!!")
@@ -102,45 +116,8 @@ def drop(board, move, piece):
         board[i-1][move-1] = piece
         return True
 
-def dropai(tempboard, row, move, piece):
-    tempboard[row][move] = piece
-        
-# Horizontal check
-def winhorizontal(board):
-    for column in range(6):
-        for row in range(4):
-
-            if board[column][row] + board[column][row+1] + board[column][row+2] + board[column][row+3] == 4 * piece:
-                return True
-            else:
-                continue
-
-# Vertical check
-def winvertical(board):    
-    for column in range(3):
-        for row in range(7):
-            if board[column][row] + board[column+1][row] + board[column+2][row] + board[column+3][row] == 4 * piece:
-                return True
-            else:
-                continue
-
-# diagonal check a 
-def windiagonala(board):    
-    for column in range(3):
-        for row in range(4):
-            if board[column][row] + board[column+1][row+1] + board[column+2][row+2] + board[column+3][row+3] == 4 * piece:
-                return True
-            else:
-                continue
-
-# diagonal check b
-def windiagonalb(board):
-    for column in range(3,6):
-        for row in range(4):
-            if board[column][row] + board[column-1][row+1] + board[column-2][row+2] + board[column-3][row+3] == 4 * piece:
-                return True
-            else:
-                continue
+def dropai(tempboard, row, move, aipiece):
+    tempboard[row][move] = aipiece
 
 # creating windows of 4x4 to make it easier to set move scores for AI with windowscore function
 def scorepostion(board, piece):
@@ -154,87 +131,87 @@ def scorepostion(board, piece):
         rowarray = [i for i in list(board[row,:])]
         for column in range(4):
             window = rowarray[column:column+4]
-            score += windowscore(window, piece)
+            score += windowscore(window)
     # Vertical score
     for column in range(7):
         columnarray = [i for i in list(board[:,column])]
         for row in range(3):
             window = columnarray[row:row+4]
-            score += windowscore(window, piece)
+            score += windowscore(window)
     # Diagonal1 score
     for row in range(3):
         for column in range(4):
             window = [board[row+i][column+i] for i in range(4)]
-            score += windowscore(window, piece)
+            score += windowscore(window)
     # Diagonal2 score
     for row in range(3):
         for column in range(4):
             window = [board[row+3-i][column+i] for i in range(4)]
-            score += windowscore(window, piece)
+            score += windowscore(window)
     return score 
 
 # Determining the points for the boardstate after a certain AI move while minimaxing
-def windowscore(window, piece):
+def windowscore(window):
     score = 0
-    # Player vs ai piece
-    if piece == 'X':
-        playerpiece = 'O'
-    elif piece == 'O':
-        playerpiece = 'X'
-    if window.count(piece) == 4:
+    if window.count(aipiece) == 4:
         score +=100
-    elif window.count(piece) == 3 and window.count(' ') == 1:
+    elif window.count(aipiece) == 3 and window.count(' ') == 1:
         score += 5
-    elif window.count(piece) == 2 and window.count(' ') == 2:
+    elif window.count(aipiece) == 2 and window.count(' ') == 2:
         score += 2
-    if window.count(playerpiece) == 3 and window.count(' ') == 1:
+    
+    if window.count(humanpiece) == 3 and window.count(' ') == 1:
         score -= 4
     return score
 
 # Checks if game is over during minimaxing
 def endgame(board):
-    return checkwin(board) or getvalidlocation(board) == 0
+    return checkwin(board,aipiece) or checkwin(board, humanpiece) or len(getvalidlocation(board)) == 0
 
 # minimax AI
-def minimax(board, depth, max):
+def minimax(board, depth, alpha, beta, maximize):
     validlocations = getvalidlocation(board)
-    end = endgame(board)
-    if depth == 0 or end:
-        if end:
-            if checkwin(board):
-                if aipiece == piece: # AI wins
-                    return (None, 100000)
-                else: # Player wins
-                    return (None, -100000)
+    if depth == 0 or endgame(board):
+        if endgame(board):
+            if checkwin(board, aipiece):
+                return None, 10000000000
+            if checkwin(board, humanpiece):
+                return None, -10000000000
             else: # No more moves possible
-                return (None, 0)
+                return None, 0
         else:
-            return (None, scorepostion(board, aipiece))
-    if max:
+            return None, scorepostion(board, aipiece)
+    if maximize:
         value = -math.inf # minus infinity
-        column = random.randint(0,6)
-        for column in validlocations:
-            row = nextopenrow(board, column)
+        move = random.randint(0,6)
+        for move in validlocations:
+            row = nextopenrow(board, move)
             boardcopy = copy.deepcopy(board)
-            dropai(boardcopy, row, column, aipiece)
-            newscore = minimax(boardcopy, depth-1, False)[1]
+            dropai(boardcopy, row, move, aipiece)
+            newscore = minimax(boardcopy, depth-1, alpha, beta, False)[1]
             if newscore > value:
                 value = newscore
-                bestcolumn = column
-        return bestcolumn, value
+                bestmove = move
+            alpha = max(alpha, value)
+            if alpha >= beta:
+                break
+        return bestmove, value
 
     else:
         value = math.inf # infinity
-        column = random.randint(0,6)
-        for column in validlocations:
-            row = nextopenrow(board, column)
+        move = random.randint(0,6)
+        for move in validlocations:
+            row = nextopenrow(board, move)
             boardcopy = copy.deepcopy(board)
-            dropai(boardcopy, row, column, humanpiece)
-            newscore = minimax(boardcopy, depth-1, True)[1]
+            dropai(boardcopy, row, move, humanpiece)
+            newscore = minimax(boardcopy, depth-1, alpha, beta, True)[1]
             if newscore < value:
                 value = newscore
-                bestcolumn = column
-        return bestcolumn, value
+                bestmove = move
+            beta = min(beta, value)
+            if beta <= alpha:
+                break
+        return bestmove, value
 
 def nextopenrow(board, column):
     	for row in reversed(range(6)):
@@ -242,18 +219,18 @@ def nextopenrow(board, column):
                 return row
 
 # Function to see if column has a free spot for getvalidlocation
-def valid(board, column):
-    if board[0][column] != ' ':
-        return False
-    else:
+def valid(board, move):
+    if board[0][move] == ' ':
         return True
+    else:
+        return False
 
 # Creating a list of column with 1 or more free spots(valid function) for AI to put pieces when minimaxing
 def getvalidlocation(board):
     validlocations = []
-    for column in range(7):
-        if valid(board, column):
-            validlocations.append(column)
+    for move in range(7):
+        if valid(board, move):
+            validlocations.append(move)
     return validlocations
 
 # Player turn
@@ -296,13 +273,27 @@ def start1p(starter = ['p1','p2']):
         input("Press enter to begin...")
     return starter, player1, player2
 
+def difficulty(levels = ['1','2','3']):
+    levelnr = '0'
+    print("How hard do you want the AI to be?\n")
+    print("Enter 1 for easy, 2 for medium, 3 for hard")
+    while levelnr not in levels:
+        levelnr = input("Enter 1, 2 or 3: ")
+    if levelnr == '1':
+        level = 2
+    elif levelnr == '2':
+        level = 3
+    elif levelnr == '3':
+        level = 5
+    return level
+
 # AI move
 def computer(board):
-    move, minmaxscore = minimax(board, 4, True)
+    move, minmaxscore = minimax(board, level, -math.inf, math.inf, True)
     move += 1 
     boardprint()
     print("Thinking...")
-    time.sleep(1)
+    #time.sleep(1)
     drop(board,move, piece)
     if winner(board):
         exit()
@@ -329,6 +320,7 @@ if game not in choices:
     game = input("Enter 1 or 2: ")
 if game == '1':
     # Start 1 player game
+    level = difficulty()
     starter, player1, player2 = start1p()
     if starter == 'p1': # player(human) starts
         humanpiece = 'X'
